@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 11, 2023 at 03:10 PM
+-- Generation Time: Apr 12, 2023 at 12:19 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -32,6 +32,7 @@ USE `smarttrashbin_db`;
 CREATE TABLE `smarttrashbin_tb` (
   `id` int(11) NOT NULL,
   `data` varchar(255) NOT NULL,
+  `mode` varchar(255) NOT NULL,
   `date_created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
