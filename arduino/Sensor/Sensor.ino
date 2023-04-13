@@ -4,8 +4,9 @@
 #include <ArduinoJson.h>
 
 //note: set wifi to private because it turn off firewall
-String insertUrl = "http://192.168.1.4/smart_trashCan/php/insertData.php";
-String readUrl = "http://192.168.1.4/smart_trashCan/php/selectData.php";
+String ipUrl = "192.168.1.4";
+String insertUrl = "http://"+ipUrl+"/smart_trashCan/php/insertData.php";
+String readUrl = "http://"+ipUrl+"/smart_trashCan/php/selectData.php";
 String postPin = "post=smarttrashcan";
 String mode = "";
 const byte led = D1;

@@ -1,6 +1,6 @@
 <?php 
     include "connection.php";
-    if(isset($_POST['post']) == 'smarttrashcan'){
+    if(isset($_POST['post']) && $_POST['post'] == 'smarttrashcan'){
         $selectQuery = "SELECT * FROM `smarttrashcan_tb`";
         $resultSet = $conn->query($selectQuery);
         if($resultSet->num_rows > 0){
