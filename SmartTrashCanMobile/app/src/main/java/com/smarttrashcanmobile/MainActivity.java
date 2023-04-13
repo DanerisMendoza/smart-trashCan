@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar loadingPB;
     TextView textViewData,textViewMode;
     Button buttonMode;
-    String globaUrl = "http://192.168.1.4/smart_trashCan/php/";
+    String globaUrl = "http://192.168.1.4/smart-trashCan/php/";
     String modeGlobal = "";
 
     @Override

@@ -5,8 +5,8 @@
 
 //note: set wifi to private because it turn off firewall
 String ipUrl = "192.168.1.4";
-String insertUrl = "http://"+ipUrl+"/smart_trashCan/php/insertData.php";
-String readUrl = "http://"+ipUrl+"/smart_trashCan/php/selectData.php";
+String insertUrl = "http://"+ipUrl+"/smart-trashCan/php/insertData.php";
+String readUrl = "http://"+ipUrl+"/smart-trashCan/php/selectData.php";
 String postPin = "post=smarttrashcan";
 String mode = "";
 const byte led = D1;
