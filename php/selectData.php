@@ -1,7 +1,7 @@
 <?php 
     include "connection.php";
-    if(isset($_POST['post']) == 'smarttrashbin'){
-        $selectQuery = "SELECT * FROM `smarttrashbin_tb`";
+    if(isset($_POST['post']) == 'smarttrashcan'){
+        $selectQuery = "SELECT * FROM `smarttrashcan_tb`";
         $resultSet = $conn->query($selectQuery);
         if($resultSet->num_rows > 0){
             foreach($resultSet as $row){
