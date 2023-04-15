@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SmartTrashCanMobile</string>
+    <string name="notification_channel">My App Notifications</string>
+
 </resources>
