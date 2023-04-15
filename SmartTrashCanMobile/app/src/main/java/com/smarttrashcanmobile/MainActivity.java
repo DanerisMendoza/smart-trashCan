@@ -14,6 +14,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        GlobalClass globalClass = (GlobalClass) getApplicationContext();
+        globalClass.setTextViewStatus(findViewById(R.id.textViewStatus));
+        globalClass.setTextViewMode(findViewById(R.id.textViewMode));
         if(!foregroundServiceRunning()) {
             Intent serviceIntent = new Intent(this, MyForegroundService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

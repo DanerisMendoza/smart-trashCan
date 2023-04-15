@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -29,9 +31,10 @@ public class MyForegroundService extends Service {
 
     String globaUrl = "http://192.168.1.4/smart-trashCan/php/";
 
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        GlobalClass globalClass = (GlobalClass) getApplicationContext();
 
         final String CHANNELID = "Foreground Service ID";
         NotificationChannel channel = null;
@@ -58,6 +61,7 @@ public class MyForegroundService extends Service {
                                             try {
                                                 JSONObject respObj = new JSONObject(response);
                                                 String data = respObj.getString("data");
+                                                String mode = respObj.getString("mode");
                                                 String status = "";
                                                 if (data.equals("1")) {
                                                     status = "Empty";
@@ -67,6 +71,8 @@ public class MyForegroundService extends Service {
                                                 else {
                                                     status = "Full!";
                                                 }
+                                                globalClass.getTextViewStatus().setText("Status: "+status);
+                                                globalClass.getTextViewMode().setText("Mode: "+mode);
                                                 //notification
                                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
