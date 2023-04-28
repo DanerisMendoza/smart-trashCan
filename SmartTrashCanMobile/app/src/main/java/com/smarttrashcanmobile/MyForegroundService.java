@@ -6,6 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -69,6 +70,8 @@ public class MyForegroundService extends Service {
                                                     status = "Half-Full";
                                                 }
                                                 else {
+                                                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.notifysound);
+                                                    mp.start();
                                                     status = "Full!";
                                                 }
                                                 globalClass.getTextViewStatus().setText("Status: "+status);
