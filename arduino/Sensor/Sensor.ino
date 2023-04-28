@@ -11,6 +11,11 @@ String postPin = "post=smarttrashcan";
 String mode = "";
 const byte led = D1;
 StaticJsonDocument<200> doc;
+//ultrasonic
+const byte trigger_pin = D2;
+const byte echo_pin = D3;
+long   pulseTime ;
+double distance; 
 
 void setup() {
   Serial.begin(9600);
@@ -22,13 +27,14 @@ void setup() {
   else { 
       Serial.println("Connection failed");
   }
+  //ULTRA SONIC DISTANCE SENSOR
+  pinMode (trigger_pin, OUTPUT); 
+  pinMode (echo_pin, INPUT);
  
 }
-
+//note: make sure to not add space before and after &
 void loop() {
-  String value = "working";
-  String data = "post=smarttrashcan & data=" + (String) value;
-  sendDataToServer(data);
+  String data = "";
   readDataOfServer();
   if(mode == "ON"){
     digitalWrite(led,HIGH);
@@ -36,7 +42,29 @@ void loop() {
   else{
     digitalWrite(led,LOW);
   }
-  delay(1000);
+  digitalWrite (trigger_pin, HIGH);
+  delayMicroseconds (10);
+  digitalWrite (trigger_pin, LOW);
+  pulseTime  = pulseIn(echo_pin, HIGH);
+  distance = double(pulseTime  * 0.034 / 2.0);
+  printStatus(distance);
+  // delay(1000);
+  if(distance <= 5){
+    data = "post=smarttrashcan&data=3";
+  }
+  else if(distance < 25 && distance > 5){
+    data = "post=smarttrashcan&data=2";
+  }
+  else{
+    data = "post=smarttrashcan&data=1";
+  }
+  sendDataToServer(data);
+}
+
+void printStatus(double distance){
+  Serial.print ("Distance= ");              
+  Serial.print (distance);   
+  Serial.println("cm");
 }
 
 void sendDataToServer(String data) {
@@ -61,6 +89,6 @@ void readDataOfServer() {
   deserializeJson(doc, response);
   response = doc["mode"].as<String>();
   mode = response;
-  Serial.println(response);
+  // Serial.println(response);
   http.end();
 }
