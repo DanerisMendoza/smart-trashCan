@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         globalClass.setTextViewMode(findViewById(R.id.textViewMode));
         if(!foregroundServiceRunning()) {
             Intent serviceIntent = new Intent(this, MyForegroundService.class);
+            //note: this mean the if block will only workin in android 8 or greater
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(serviceIntent);
             }

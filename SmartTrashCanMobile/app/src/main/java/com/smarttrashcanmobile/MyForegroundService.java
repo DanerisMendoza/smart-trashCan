@@ -30,7 +30,7 @@ import java.util.Map;
 
 public class MyForegroundService extends Service {
 
-    String globaUrl = "http://192.168.1.4/smart-trashCan/php/";
+    String globaUrl = "http://192.168.1.6/smart-trashCan/php/";
 
 
     @Override

@@ -4,23 +4,25 @@
 #include <ArduinoJson.h>
 
 //note: set wifi to private because it turn off firewall
-String ipUrl = "192.168.1.4";
+String ipUrl = "192.168.1.6";
 String insertUrl = "http://"+ipUrl+"/smart-trashCan/php/insertData.php";
 String readUrl = "http://"+ipUrl+"/smart-trashCan/php/selectData.php";
 String postPin = "post=smarttrashcan";
 String mode = "";
-const byte led = D1;
 StaticJsonDocument<200> doc;
 //ultrasonic
-const byte trigger_pin = D2;
-const byte echo_pin = D3;
+const byte trigger_pin = D0;
+const byte echo_pin = D1;
 long   pulseTime ;
 double distance; 
+//rgb
+byte red = D2;
+byte green = D3;
+byte blue = D4;
 
 void setup() {
   Serial.begin(9600);
   WiFiManager wm;
-  pinMode(led,OUTPUT);
   if(wm.autoConnect("Sensor","password")) {
       Serial.println("Connected");
   } 
@@ -30,33 +32,43 @@ void setup() {
   //ULTRA SONIC DISTANCE SENSOR
   pinMode (trigger_pin, OUTPUT); 
   pinMode (echo_pin, INPUT);
+  //rgb
+  pinMode(red, OUTPUT);
+  pinMode(green, OUTPUT);
+  pinMode(blue, OUTPUT);
  
 }
 //note: make sure to not add space before and after &
 void loop() {
   String data = "";
   readDataOfServer();
-  if(mode == "ON"){
-    digitalWrite(led,HIGH);
-  }
-  else{
-    digitalWrite(led,LOW);
-  }
   digitalWrite (trigger_pin, HIGH);
   delayMicroseconds (10);
   digitalWrite (trigger_pin, LOW);
   pulseTime  = pulseIn(echo_pin, HIGH);
   distance = double(pulseTime  * 0.034 / 2.0);
   printStatus(distance);
-  // delay(1000);
+
   if(distance <= 5){
     data = "post=smarttrashcan&data=3";
+    // red
+    digitalWrite(red, HIGH);
+    digitalWrite(green, LOW);
+    digitalWrite(blue, LOW);
   }
   else if(distance < 25 && distance > 5){
     data = "post=smarttrashcan&data=2";
+    //blue
+    digitalWrite(red, LOW);
+    digitalWrite(green, LOW);
+    digitalWrite(blue, HIGH);
   }
   else{
     data = "post=smarttrashcan&data=1";
+    //green
+    digitalWrite(red, LOW);
+    digitalWrite(green, HIGH);
+    digitalWrite(blue, LOW);
   }
   sendDataToServer(data);
 }
