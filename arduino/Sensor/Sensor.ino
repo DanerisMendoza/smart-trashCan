@@ -6,7 +6,8 @@
 #include <Servo.h>
 
 //note: set wifi to private because it turn off firewall
-String ipUrl = "192.168.1.5";
+// String ipUrl = "ucc-csd-bscs.com/STC";
+String ipUrl = "192.168.1.6";
 String insertUrl = "http://"+ipUrl+"/smart-trashCan/php/insertData.php";
 String readUrl = "http://"+ipUrl+"/smart-trashCan/php/selectData.php";
 String postPin = "post=smarttrashcan";
@@ -57,14 +58,14 @@ void setup() {
 //note: make sure to not add space before and after &
 void loop() {
   String data = "";
-  // readDataOfServer();
+  readDataOfServer();
   float distance = ultrasonic1.distanceRead();
   float distance2 = ultrasonic2.distanceRead();
   
   // Print the distances to the serial monitor
-  Serial.print("Distance from sensor 1: "+ (String) distance) + "CM";
-  Serial.print(" | ");
-  Serial.println("Distance from sensor 2: " + (String) distance2 + "CM");
+  // Serial.print("Distance from sensor 1: "+ (String) distance) + "CM";
+  // Serial.print(" | ");
+  // Serial.println("Distance from sensor 2: " + (String) distance2 + "CM");
 
   if(distance <= 5){
     data = "post=smarttrashcan&data=3";
@@ -87,7 +88,7 @@ void loop() {
     digitalWrite(green, HIGH);
     digitalWrite(blue, LOW);
   }
-  sendDataToServer(data);
+  // sendDataToServer(data);
   delay(50); 
   //note: the servo bug trigger because it require more power therefore the other components is malfunctioning
   if(distance2 <= 10){
@@ -101,6 +102,29 @@ void loop() {
   delay(50); 
 }
 
+void readDataOfServer() {
+  WiFiClient wifiClient;
+  HTTPClient http;
+  http.begin(wifiClient, readUrl);
+  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  int httpCode = http.POST(postPin);
+    if (httpCode > 0) {
+      Serial.printf("HTTP status code: %d\n", httpCode);
+      Serial.println("Response:");
+      http.writeToStream(&Serial);
+      Serial.println();
+    } else {
+      Serial.printf("HTTP request failed with error %s\n", http.errorToString(httpCode).c_str());
+    }
+
+  // String response = http.getString();
+  // Serial.println(response);
+  // deserializeJson(doc, response);
+  // response = doc["mode"].as<String>();
+  // mode = response;
+  http.end();
+}
+
 void sendDataToServer(String data) {
   WiFiClient wifiClient;
   HTTPClient http;
@@ -108,21 +132,9 @@ void sendDataToServer(String data) {
   http.addHeader("Content-Type", "application/x-www-form-urlencoded");
   int httpCode = http.POST(data);
   String response = http.getString();
-  // Serial.println(httpCode);  //show your http response status
-  // Serial.println(response);  //show your echo
+  Serial.println(httpCode);  //show your http response status
+  Serial.println(response);  //show your echo
   http.end();
 }
 
-void readDataOfServer() {
-  WiFiClient wifiClient;
-  HTTPClient http;
-  http.begin(wifiClient, readUrl);
-  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-  int httpCode = http.POST(postPin);
-  String response = http.getString();
-  deserializeJson(doc, response);
-  response = doc["mode"].as<String>();
-  mode = response;
-  // Serial.println(response);
-  http.end();
-}
+
