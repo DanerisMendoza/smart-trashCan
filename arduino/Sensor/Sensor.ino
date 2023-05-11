@@ -7,9 +7,12 @@
 
 //note: set wifi to private because it turn off firewall
 // String ipUrl = "ucc-csd-bscs.com/STC";
-String ipUrl = "192.168.1.6";
-String insertUrl = "http://"+ipUrl+"/smart-trashCan/php/insertData.php";
-String readUrl = "http://"+ipUrl+"/smart-trashCan/php/selectData.php";
+// String ipUrl = "192.168.1.6";
+// String insertUrl = "http://"+ipUrl+"/smart-trashCan/php/insertData.php";
+// String readUrl = "http://"+ipUrl+"/smart-trashCan/php/selectData.php";
+String insertUrl = "http://ucc-csd-bscs.com/STC/smart-trashCan/insertData.php";
+String readUrl = "http://ucc-csd-bscs.com/STC/smart-trashCan/selectData.php";
+
 String postPin = "post=smarttrashcan";
 String mode = "";
 StaticJsonDocument<200> doc;
@@ -88,7 +91,7 @@ void loop() {
     digitalWrite(green, HIGH);
     digitalWrite(blue, LOW);
   }
-  // sendDataToServer(data);
+  sendDataToServer(data);
   delay(50); 
   //note: the servo bug trigger because it require more power therefore the other components is malfunctioning
   if(distance2 <= 10){
@@ -108,20 +111,11 @@ void readDataOfServer() {
   http.begin(wifiClient, readUrl);
   http.addHeader("Content-Type", "application/x-www-form-urlencoded");
   int httpCode = http.POST(postPin);
-    if (httpCode > 0) {
-      Serial.printf("HTTP status code: %d\n", httpCode);
-      Serial.println("Response:");
-      http.writeToStream(&Serial);
-      Serial.println();
-    } else {
-      Serial.printf("HTTP request failed with error %s\n", http.errorToString(httpCode).c_str());
-    }
-
-  // String response = http.getString();
-  // Serial.println(response);
-  // deserializeJson(doc, response);
-  // response = doc["mode"].as<String>();
-  // mode = response;
+  String response = http.getString();
+  Serial.println(response);
+  deserializeJson(doc, response);
+  response = doc["mode"].as<String>();
+  mode = response;
   http.end();
 }
 

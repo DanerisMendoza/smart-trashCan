@@ -1,6 +1,7 @@
 package com.smarttrashcanmobile;
 
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -30,7 +31,7 @@ import java.util.Map;
 
 public class MyForegroundService extends Service {
 
-    String globaUrl = "http://192.168.1.5/smart-trashCan/php/";
+    String globaUrl = "http://ucc-csd-bscs.com/STC/smart-tr ashCan/php/";
 
 
     @Override
@@ -52,10 +53,11 @@ public class MyForegroundService extends Service {
                     @Override
                     public void run() {
                         while (true) {
-                            String url = globaUrl + "selectData.php";
+                            String url = "http://ucc-csd-bscs.com/STC/smart-trashCan/selectData.php";
                             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                             StringRequest request = new StringRequest(Request.Method.POST, url,
                                     new com.android.volley.Response.Listener<String>() {
+                                        @SuppressLint("ResourceType")
                                         @Override
                                         public void onResponse(String response) {
                                             Notification.Builder notification = null;
@@ -87,7 +89,7 @@ public class MyForegroundService extends Service {
                                                     notification = new Notification.Builder(getApplicationContext(), CHANNELID)
                                                             .setContentText("Smart Trash Can")
                                                             .setContentTitle("Status: "+status)
-                                                            .setSmallIcon(R.drawable.ic_launcher_background);
+                                                            .setSmallIcon(R.raw.bg);
                                                 }
                                                 startForeground(1001, notification.build());
                                             } catch (JSONException e) {
