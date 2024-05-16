@@ -7,9 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Button;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    Button buttonMode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +28,18 @@ public class MainActivity extends AppCompatActivity {
                 startForegroundService(serviceIntent);
             }
         }
+        buttonMode = findViewById(R.id.buttonMode);
+        buttonMode.setOnClickListener(view -> {
+            ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = activityManager.getRunningAppProcesses();
+            for (ActivityManager.RunningAppProcessInfo processInfo : runningAppProcesses) {
+                if (processInfo.processName.equals(getApplicationContext().getApplicationInfo().processName)) {
+                    activityManager.killBackgroundProcesses(processInfo.processName);
+                    android.os.Process.killProcess(processInfo.pid);
+                    break;
+                }
+            }
+        });
     }
 
     public boolean foregroundServiceRunning(){
